@@ -1,4 +1,23 @@
-export function PizzaItem({item}){
+import {useState} from "react";
+import classNames from "classnames";
+import PropTypes from 'prop-types'
+
+
+export function PizzaItem({item}) {
+
+
+    const availableTypes = ['тонкое', 'традиционное']
+    const availableSizes = [26, 30, 40]
+    const [activeType, setActiveType] = useState(item.types[0])
+    const [activeSize, setActiveSize] = useState(item.sizes[0])
+
+    const onSelectType = (index) => {
+        setActiveType(index)
+    }
+    const onSelectSize = (index) => {
+        setActiveSize(index)
+    }
+
     return (
         <div className="pizza-block">
             <img
@@ -9,13 +28,40 @@ export function PizzaItem({item}){
             <h4 className="pizza-block__title">{item.name}</h4>
             <div className="pizza-block__selector">
                 <ul>
+                    {/*{*/}
+                    {/*    item.types.map((type, index) => <li className={index === 0 ? 'active' : ''} key={index}>{type === 0 ? 'тонкое' : 'традиционное'}</li>)*/}
+                    {/*}*/}
                     {
-                        item.types.map((type, index) => <li className={index === 0 ? 'active' : ''} key={index}>{type === 0 ? 'тонкое' : 'традиционное'}</li>)
+                        availableTypes.map((type, index) =>
+                            <li
+                                className={classNames({
+                                        active: activeType === index,
+                                        disabled: !item.types.includes(index)
+                                    }
+                                )}
+                                onClick={() => {
+                                    onSelectType(index)
+                                }} key={type}>{type}</li>)
                     }
                 </ul>
                 <ul>
+                    {/*{*/}
+                    {/*    item.sizes.map((size, index) => <li className={index === 0 ? 'active' : ''}*/}
+                    {/*                                        key={index}>{size} см.</li>)*/}
+                    {/*}*/}
+
+
                     {
-                        item.sizes.map((size, index) => <li className={index === 0 ? 'active' : ''} key={index}>{size} см.</li>)
+                        availableSizes.map((size, index) =>
+                            <li
+                                className={classNames({
+                                        active: activeSize === size,
+                                        disabled: !item.sizes.includes(size)
+                                    }
+                                )}
+                                onClick={() => {
+                                    onSelectSize(index)
+                                }} key={size}>{size} см.</li>)
                     }
                 </ul>
             </div>
@@ -40,4 +86,13 @@ export function PizzaItem({item}){
             </div>
         </div>
     )
+
+
+
 }
+
+PizzaItem.propTypes = {
+    items: PropTypes.object,
+    name: PropTypes.string
+}
+

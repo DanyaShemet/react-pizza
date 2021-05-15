@@ -10,6 +10,7 @@ export function SortPopup({items}){
     const elementsSort = items && items.map((el, index) => <li className={activeItem === index ? 'active' : ''}
                                                                      onClick={() => onSelectItem(index)} key={`${el}_${index}`}>{el}</li>)
     const sortRef = useRef()
+    const listRef = useRef()
 
     const toggleVisiblePopup = () => {
         setVisiblePopup(!visiblePopup)
@@ -17,7 +18,6 @@ export function SortPopup({items}){
 
     const onSelectItem = (index) => {
         setActiveItem(index)
-        setVisiblePopup(false)
     }
 
     useEffect(() => {
@@ -25,9 +25,17 @@ export function SortPopup({items}){
     }, [])
 
     const clickHandler = (e) => {
-        if (!e.path.includes(sortRef.current)){
+        // console.log(e.target.parentElement === listRef.current)
+        // console.log(e.target.offsetParent === sortRef.current)
+
+        if  (e.target.offsetParent !== sortRef.current){
             setVisiblePopup(false)
         }
+
+        // if (!e.path.includes(sortRef.current)){
+        //     setVisiblePopup(false)
+        // }
+
     }
 
     return(
@@ -50,7 +58,7 @@ export function SortPopup({items}){
                 <span onClick={toggleVisiblePopup}>{items[activeItem]}</span>
             </div>
             {visiblePopup && <div className="sort__popup">
-                <ul>
+                <ul ref={listRef}>
                     {elementsSort}
                 </ul>
             </div>}
