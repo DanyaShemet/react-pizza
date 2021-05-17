@@ -7,8 +7,8 @@ export function SortPopup({items}){
     const [visiblePopup, setVisiblePopup] = useState(false)
 
 
-    const elementsSort = items && items.map((el, index) => <li className={activeItem === index ? 'active' : ''}
-                                                                     onClick={() => onSelectItem(index)} key={`${el}_${index}`}>{el}</li>)
+    const elementsSort = items.name && items.name.map((el, index) => <li className={activeItem === index ? 'active' : ''}
+                                                                     onClick={() => onSelectItem(index)} key={`${el}_${items.type}`}>{el}</li>)
     const sortRef = useRef()
     const listRef = useRef()
 
@@ -25,9 +25,6 @@ export function SortPopup({items}){
     }, [])
 
     const clickHandler = (e) => {
-        // console.log(e.target.parentElement === listRef.current)
-        // console.log(e.target.offsetParent === sortRef.current)
-
         if  (e.target.offsetParent !== sortRef.current){
             setVisiblePopup(false)
         }
@@ -55,7 +52,7 @@ export function SortPopup({items}){
                     />
                 </svg>
                 <b>Сортировка по:</b>
-                <span onClick={toggleVisiblePopup}>{items[activeItem]}</span>
+                <span onClick={toggleVisiblePopup}>{items[activeItem].name}</span>
             </div>
             {visiblePopup && <div className="sort__popup">
                 <ul ref={listRef}>

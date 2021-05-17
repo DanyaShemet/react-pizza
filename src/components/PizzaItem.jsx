@@ -60,7 +60,7 @@ export function PizzaItem({item}) {
                                     }
                                 )}
                                 onClick={() => {
-                                    onSelectSize(index)
+                                    onSelectSize(size)
                                 }} key={size}>{size} см.</li>)
                     }
                 </ul>
