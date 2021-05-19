@@ -1,14 +1,12 @@
-import {useState, useEffect, useRef} from "react";
+import {useState, useEffect, useRef, memo} from "react";
 
-
-
-export function SortPopup({items}){
+export const SortPopup = memo(function SortPopup({items}){
     const [activeItem, setActiveItem] = useState(0)
     const [visiblePopup, setVisiblePopup] = useState(false)
 
 
     const elementsSort = items.name && items.name.map((el, index) => <li className={activeItem === index ? 'active' : ''}
-                                                                     onClick={() => onSelectItem(index)} key={`${el}_${items.type}`}>{el}</li>)
+                                                                         onClick={() => onSelectItem(index)} key={`${el}_${items.type}`}>{el}</li>)
     const sortRef = useRef()
     const listRef = useRef()
 
@@ -61,4 +59,5 @@ export function SortPopup({items}){
             </div>}
         </div>
     )
-}
+})
+
