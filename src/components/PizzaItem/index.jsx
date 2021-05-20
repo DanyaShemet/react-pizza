@@ -1,11 +1,10 @@
 import {useState} from "react";
 import classNames from "classnames";
 import PropTypes from 'prop-types'
-import {Loader} from "./Loader";
+import {Button} from "../Button";
 
-
-export function PizzaItem({item}) {
-
+export function PizzaItem({item, onAddPizzaToCart}) {
+    const {id, imageUrl, name, price} = item
 
     const availableTypes = ['тонкое', 'традиционное']
     const availableSizes = [26, 30, 40]
@@ -19,16 +18,28 @@ export function PizzaItem({item}) {
         setActiveSize(index)
     }
 
+    const handleAddPizza = () => {
+        const obj = {
+            id,
+            name,
+            imageUrl,
+            price,
+            type: availableTypes[activeType],
+            size: activeSize
+
+        };
+        onAddPizzaToCart(obj)
+    }
+
 
     return (
-
         <div className="pizza-block">
             <img
                 className="pizza-block__image"
-                src={item.imageUrl}
+                src={imageUrl}
                 alt="Pizza"
             />
-            <h4 className="pizza-block__title">{item.name}</h4>
+            <h4 className="pizza-block__title">{name}</h4>
             <div className="pizza-block__selector">
                 <ul>
                     {
@@ -60,8 +71,8 @@ export function PizzaItem({item}) {
                 </ul>
             </div>
             <div className="pizza-block__bottom">
-                <div className="pizza-block__price">от {item.price} ₽</div>
-                <div className="button button--outline button--add">
+                <div className="pizza-block__price">от {price} ₽</div>
+                <Button className="button button--outline button--add" onClick={handleAddPizza}>
                     <svg
                         width="12"
                         height="12"
@@ -76,7 +87,8 @@ export function PizzaItem({item}) {
                     </svg>
                     <span>Добавить</span>
                     <i>2</i>
-                </div>
+                </Button>
+
             </div>
         </div>
     )
@@ -87,10 +99,8 @@ export function PizzaItem({item}) {
 PizzaItem.propTypes = {
     items: PropTypes.object,
     name: PropTypes.string,
-    isLoading: PropTypes.bool
+    onAddPizzaToCart: PropTypes.func
 }
 
-PizzaItem.defaultProps = {
-    isLoading: false
-}
+
 
