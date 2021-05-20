@@ -1,39 +1,39 @@
 import {useState, useEffect, useRef, memo} from "react";
+import PropTypes from "prop-types";
 
-export const SortPopup = memo(function SortPopup({items}){
-    const [activeItem, setActiveItem] = useState(0)
+
+export const SortPopup = memo(function SortPopup({activeSortType, items, onClickSortItem}) {
     const [visiblePopup, setVisiblePopup] = useState(false)
 
-
-    const elementsSort = items.name && items.name.map((el, index) => <li className={activeItem === index ? 'active' : ''}
-                                                                         onClick={() => onSelectItem(index)} key={`${el}_${items.type}`}>{el}</li>)
+    const elementsSort = items && items.map((el, index) => <li
+        className={activeSortType === el.type ? 'active' : ''}
+        onClick={() => onSelectItem(el)}
+        key={`${index}_${el.type}`}>
+        {el.name}
+    </li>)
     const sortRef = useRef()
-    const listRef = useRef()
+    const activeLabel = items.find(obj => obj.type === activeSortType)
+
 
     const toggleVisiblePopup = () => {
         setVisiblePopup(!visiblePopup)
     }
 
-    const onSelectItem = (index) => {
-        setActiveItem(index)
+    const onSelectItem = (obj) => {
+        onClickSortItem(obj)
     }
 
     useEffect(() => {
-        document.body.addEventListener('click' , clickHandler)
+        document.body.addEventListener('click', clickHandler)
     }, [])
 
     const clickHandler = (e) => {
-        if  (e.target.offsetParent !== sortRef.current){
+        if (e.target.offsetParent !== sortRef.current) {
             setVisiblePopup(false)
         }
-
-        // if (!e.path.includes(sortRef.current)){
-        //     setVisiblePopup(false)
-        // }
-
     }
 
-    return(
+    return (
         <div className="sort" ref={sortRef}>
             <div className="sort__label">
                 <svg
@@ -50,14 +50,25 @@ export const SortPopup = memo(function SortPopup({items}){
                     />
                 </svg>
                 <b>Сортировка по:</b>
-                <span onClick={toggleVisiblePopup}>{items[activeItem].name}</span>
+                <span onClick={toggleVisiblePopup}>{activeLabel.name}</span>
             </div>
             {visiblePopup && <div className="sort__popup">
-                <ul ref={listRef}>
+                <ul>
                     {elementsSort}
                 </ul>
             </div>}
         </div>
     )
 })
+
+
+SortPopup.propTypes = {
+    activeSortType: PropTypes.string.isRequired,
+    items: PropTypes.array.isRequired,
+    onClickSortItem: PropTypes.func.isRequired
+}
+
+SortPopup.defaultProps = {
+    activeSortType: 0, items: []
+}
 

@@ -1,6 +1,7 @@
 import {useState} from "react";
 import classNames from "classnames";
 import PropTypes from 'prop-types'
+import {Loader} from "./Loader";
 
 
 export function PizzaItem({item}) {
@@ -18,7 +19,9 @@ export function PizzaItem({item}) {
         setActiveSize(index)
     }
 
+
     return (
+
         <div className="pizza-block">
             <img
                 className="pizza-block__image"
@@ -28,9 +31,6 @@ export function PizzaItem({item}) {
             <h4 className="pizza-block__title">{item.name}</h4>
             <div className="pizza-block__selector">
                 <ul>
-                    {/*{*/}
-                    {/*    item.types.map((type, index) => <li className={index === 0 ? 'active' : ''} key={index}>{type === 0 ? 'тонкое' : 'традиционное'}</li>)*/}
-                    {/*}*/}
                     {
                         availableTypes.map((type, index) =>
                             <li
@@ -45,12 +45,6 @@ export function PizzaItem({item}) {
                     }
                 </ul>
                 <ul>
-                    {/*{*/}
-                    {/*    item.sizes.map((size, index) => <li className={index === 0 ? 'active' : ''}*/}
-                    {/*                                        key={index}>{size} см.</li>)*/}
-                    {/*}*/}
-
-
                     {
                         availableSizes.map((size, index) =>
                             <li
@@ -88,11 +82,15 @@ export function PizzaItem({item}) {
     )
 
 
-
 }
 
 PizzaItem.propTypes = {
     items: PropTypes.object,
-    name: PropTypes.string
+    name: PropTypes.string,
+    isLoading: PropTypes.bool
+}
+
+PizzaItem.defaultProps = {
+    isLoading: false
 }
 
