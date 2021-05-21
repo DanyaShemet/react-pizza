@@ -1,14 +1,46 @@
-import {CartEmpty, PizzaInCart} from "../components";
-import {useSelector} from "react-redux";
+import {CartEmpty, CartItem} from "../components";
+import {useDispatch, useSelector} from "react-redux";
+import {Link} from "react-router-dom";
+import {clearCart, minusItem, plusItem, removeCartItem} from "../redux/actions/cart";
 
 export function Cart() {
-    const items = useSelector(({cart}) => cart)
-    console.log(items)
+    const dispatch = useDispatch()
+    const {items, totalPrice, itemsCount} = useSelector(({cart}) => cart)
+
+    const addedPizzas = Object.keys(items).map(key => {
+        // Получаем только первый елемент из массива что бы рендерить только пицу одного вида
+       return items[key].totalOneTypePizza[0]
+    })
+
+    const plusPizza = (id) => {
+        dispatch(plusItem(id))
+
+    }
+    const minusPizza = (id) => {
+        dispatch(minusItem(id))
+    }
+
+    const removePizzaItem = (id) => {
+        if (window.confirm('Вы действительно хотите удалить пиццу?')){
+            dispatch(removeCartItem(id))
+        }
+
+    }
+
+    const resetCart = () => {
+        if (window.confirm('Вы действительно хотите очистить корзину?')){
+            dispatch(clearCart())
+        }
+
+    }
+
+    const onClickOrder = () => {
+        console.log('Ваш заказ', items)
+    }
 
     return (
         <div>
-            <CartEmpty/>
-            <div className="container container--cart">
+            {itemsCount === 0 ? <CartEmpty/>  : <div className="container container--cart">
                 <div className="cart">
                     <div className="cart__top">
                         <h2 className="content__title">
@@ -26,7 +58,7 @@ export function Cart() {
                             </svg>
                             Корзина
                         </h2>
-                        <div className="cart__clear">
+                        <div className="cart__clear" onClick={resetCart}>
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <path d="M2.5 5H4.16667H17.5" stroke="#B6B6B6" strokeWidth="1.2" strokeLinecap="round"
@@ -44,15 +76,30 @@ export function Cart() {
                         </div>
                     </div>
                     <div className="content__items">
-                        <PizzaInCart />
+
+                        {
+                            addedPizzas.map(pizza =>  <CartItem
+                                key={pizza.id}
+                                id={pizza.id}
+                                name={pizza.name}
+                                type={pizza.type}
+                                size={pizza.size}
+                                totalPrice={items[pizza.id].totalPrice}
+                                itemsCount={ items[pizza.id].totalOneTypePizza.length}
+                                onPlus={plusPizza}
+                                onMinus={minusPizza}
+                                onReset={removePizzaItem}
+                            />)
+                        }
+
                     </div>
                     <div className="cart__bottom">
                         <div className="cart__bottom-details">
-                            <span> Всего пицц: <b>{items.itemsCount} шт.</b> </span>
-                            <span> Сумма заказа: <b>{items.totalPrice} ₽</b> </span>
+                            <span> Всего пицц: <b>{itemsCount} шт.</b> </span>
+                            <span> Сумма заказа: <b>{totalPrice} ₽</b> </span>
                         </div>
                         <div className="cart__bottom-buttons">
-                            <a href="/" className="button button--outline button--add go-back-btn">
+                            <Link to="/" className="button button--outline button--add go-back-btn">
                                 <svg width="8" height="14" viewBox="0 0 8 14" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path d="M7 13L1 6.93015L6.86175 1" stroke="#D3D3D3" strokeWidth="1.5"
@@ -60,14 +107,16 @@ export function Cart() {
                                 </svg>
 
                                 <span>Вернуться назад</span>
-                            </a>
-                            <div className="button pay-btn">
+                            </Link>
+
+                            <div className="button pay-btn" onClick={onClickOrder}>
                                 <span>Оплатить сейчас</span>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>}
+
 
         </div>
     )

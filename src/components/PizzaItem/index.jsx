@@ -3,7 +3,7 @@ import classNames from "classnames";
 import PropTypes from 'prop-types'
 import {Button} from "../Button";
 
-export function PizzaItem({item, onAddPizzaToCart}) {
+export function PizzaItem({item, onAddPizzaToCart, inCartCount}) {
     const {id, imageUrl, name, price} = item
 
     const availableTypes = ['тонкое', 'традиционное']
@@ -26,7 +26,6 @@ export function PizzaItem({item, onAddPizzaToCart}) {
             price,
             type: availableTypes[activeType],
             size: activeSize
-
         };
         onAddPizzaToCart(obj)
     }
@@ -86,7 +85,9 @@ export function PizzaItem({item, onAddPizzaToCart}) {
                         />
                     </svg>
                     <span>Добавить</span>
-                    <i>2</i>
+                    {
+                        inCartCount && <i>{inCartCount}</i>
+                    }
                 </Button>
 
             </div>
@@ -99,7 +100,8 @@ export function PizzaItem({item, onAddPizzaToCart}) {
 PizzaItem.propTypes = {
     items: PropTypes.object,
     name: PropTypes.string,
-    onAddPizzaToCart: PropTypes.func
+    onAddPizzaToCart: PropTypes.func,
+    inCartCount: PropTypes.number
 }
 
 
