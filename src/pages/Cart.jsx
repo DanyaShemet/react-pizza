@@ -7,13 +7,15 @@ export function Cart() {
     const dispatch = useDispatch()
     const {items, totalPrice, itemsCount} = useSelector(({cart}) => cart)
 
+
     const addedPizzas = Object.keys(items).map(key => {
         // Получаем только первый елемент из массива что бы рендерить только пицу одного вида
        return items[key].totalOneTypePizza[0]
     })
 
+
     const plusPizza = (id) => {
-        dispatch(plusItem(id))
+      dispatch(plusItem(id))
 
     }
     const minusPizza = (id) => {
@@ -37,6 +39,8 @@ export function Cart() {
     const onClickOrder = () => {
         console.log('Ваш заказ', items)
     }
+
+
 
     return (
         <div>
@@ -79,13 +83,13 @@ export function Cart() {
 
                         {
                             addedPizzas.map(pizza =>  <CartItem
-                                key={pizza.id}
+                                key={pizza.id + '_' + pizza.type + '_' + pizza.size}
                                 id={pizza.id}
                                 name={pizza.name}
                                 type={pizza.type}
                                 size={pizza.size}
-                                totalPrice={items[pizza.id].totalPrice}
-                                itemsCount={ items[pizza.id].totalOneTypePizza.length}
+                                totalPrice={items[pizza.id + '_' + pizza.type + '_' + pizza.size].totalPrice}
+                                itemsCount={ items[pizza.id + '_' + pizza.type + '_' + pizza.size].totalOneTypePizza.length}
                                 onPlus={plusPizza}
                                 onMinus={minusPizza}
                                 onReset={removePizzaItem}

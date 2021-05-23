@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import {Button} from "../Button";
 
 export function PizzaItem({item, onAddPizzaToCart, inCartCount}) {
+
     const {id, imageUrl, name, price} = item
 
     const availableTypes = ['тонкое', 'традиционное']
@@ -86,7 +87,7 @@ export function PizzaItem({item, onAddPizzaToCart, inCartCount}) {
                     </svg>
                     <span>Добавить</span>
                     {
-                        inCartCount && <i>{inCartCount}</i>
+                        inCartCount !== 0 ? <i>{inCartCount}</i> : ''
                     }
                 </Button>
 

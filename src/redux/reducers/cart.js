@@ -1,7 +1,10 @@
+import {act} from "@testing-library/react";
+
 const initialState = {
-    items: {},
+    items: [],
     totalPrice: 0,
-    itemsCount: 0
+    itemsCount: 0,
+    countOfPizza: {}
 }
 
 const getTotalPrice = arr => arr.reduce((sum, obj) => obj.price + sum, 0)
@@ -70,16 +73,27 @@ export const cart = (state = initialState, action) => {
                 totalPrice
             }
         case 'ADD_PIZZA_TO_CART': {
-            const currentPizzaItems = !state.items[action.payload.id] // есть ли оббект с таким айди
+            const id = action.payload.id + '_' + action.payload.type + '_' + action.payload.size
+            const action_id = action.payload.id
+            let count = 0
+
+            const currentPizzaItems = !state.items[id] // есть ли оббект с таким айди
                 ? [action.payload] // если нет то добавляем обьект пиццы
-                : [...state.items[action.payload.id].totalOneTypePizza, action.payload] // если есть то к этому обьекту добавляем еще один наш
+                : [...state.items[id].totalOneTypePizza, action.payload] // если есть то к этому обьекту добавляем еще один наш
             const newItems = {
                 ...state.items, // прошлые елементы
-                [action.payload.id]: { // по нужному айди
+                [id]: { // по нужному айди
                     totalOneTypePizza: currentPizzaItems, // массив обьектов пиц
                     totalPrice: getTotalPrice(currentPizzaItems) // считаем сколько стоят пиццы в массиве
-                }
+                },
             };
+
+
+            const currestPizzaCounter = !state.countOfPizza[action_id] ? 1 : state.countOfPizza[action_id] + 1
+            const newCount = {
+                ...state.countOfPizza,
+                [action_id]: currestPizzaCounter
+            }
 
             // получем все массивы по ключу и плюсуем к длине массива пиц в обьекте
             const itemsCount = Object.keys(newItems).reduce((sum, key) => newItems[key].totalOneTypePizza.length + sum, 0)
@@ -87,7 +101,8 @@ export const cart = (state = initialState, action) => {
                 ...state, // прошлый стейт
                 items: newItems, // пиццы
                 itemsCount, // кол-во пиц для корзины
-                totalPrice: state.totalPrice + action.payload.price // сумма заказа для корзины
+                totalPrice: state.totalPrice + action.payload.price, // сумма заказа для корзины
+                countOfPizza: newCount
             }
         }
         default:

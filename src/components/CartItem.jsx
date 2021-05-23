@@ -3,14 +3,14 @@ import {Button} from "./Button";
 export function CartItem({id, name, type, size, totalPrice, itemsCount, onPlus, onMinus, onReset}) {
 
     const plusHandler = () => {
-        onPlus(id)
+        onPlus(id + '_' + type + '_' + size)
     }
     const minusHandler = () => {
-        onMinus(id)
+        onMinus(id + '_' + type + '_' + size)
     }
 
     const resetHandler = () => {
-        onReset(id)
+        onReset(id + '_' + type + '_' + size)
     }
     return (
         <div className="cart__item">
