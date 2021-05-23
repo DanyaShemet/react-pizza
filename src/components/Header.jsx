@@ -19,8 +19,8 @@ export function Header() {
                     <div className="header__logo">
                         <img width="38" src={logo} alt="Pizza logo"/>
                         <div>
-                            <h1>React Pizza</h1>
-                            <p>самая вкусная пицца во вселенной</p>
+                            <h1>Shemet Pizza</h1>
+                            <p>Тестовый магазин на реакте</p>
                         </div>
                     </div>
                 </Link>

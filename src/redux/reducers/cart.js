@@ -75,7 +75,6 @@ export const cart = (state = initialState, action) => {
         case 'ADD_PIZZA_TO_CART': {
             const id = action.payload.id + '_' + action.payload.type + '_' + action.payload.size
             const action_id = action.payload.id
-            let count = 0
 
             const currentPizzaItems = !state.items[id] // есть ли оббект с таким айди
                 ? [action.payload] // если нет то добавляем обьект пиццы
@@ -88,7 +87,7 @@ export const cart = (state = initialState, action) => {
                 },
             };
 
-
+            // Узнаем кол-во пиц по айди, для отображения в PizzaItem/index.jsx
             const currestPizzaCounter = !state.countOfPizza[action_id] ? 1 : state.countOfPizza[action_id] + 1
             const newCount = {
                 ...state.countOfPizza,
